@@ -9,5 +9,6 @@ dependencies:
   - numpy
   - jupyter
   - ipykernel
+  - pytest
   - pip:
       - -e .

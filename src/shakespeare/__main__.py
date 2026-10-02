@@ -1,10 +1,38 @@
 import argparse
+from collections.abc import Sequence
+from pathlib import Path
+
+from shakespeare.word_count import count_words_in_file, write_word_counts
+
+# repo root is two levels up from this file (src/shakespeare/__main__.py)
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def main() -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="shakespeare data processing")
-    parser.parse_args()
-    print("shakespeare CLI stub — implement processing logic here")
+    parser.add_argument(
+        "--input",
+        type=Path,
+        default=REPO_ROOT / "data" / "shakespeare.txt",
+        help="path to the input text file",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=REPO_ROOT / "data" / "output",
+        help="directory to write the word counts JSON to",
+    )
+    args = parser.parse_args(argv)
+
+    if not args.input.exists():
+        parser.error(f"Input file not found: {args.input}")
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = args.output_dir / "shakespeare_word_counts.json"
+
+    word_counts = count_words_in_file(args.input)
+    write_word_counts(word_counts, output_path)
+    print("Word counts have been written to:", output_path)
 
 
 if __name__ == "__main__":

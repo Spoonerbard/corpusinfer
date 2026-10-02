@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+.conda/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Data (keep folder, ignore contents)
+data/*
+!data/.gitkeep
+
+
+# conda_envs
+conda_envs/*

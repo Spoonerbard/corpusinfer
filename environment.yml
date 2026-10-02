@@ -1,0 +1,13 @@
+name: shakespeare
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pandas
+  - numpy
+  - jupyter
+  - ipykernel
+  - pip:
+      - -e .

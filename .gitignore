@@ -30,3 +30,6 @@ data/*
 
 # conda_envs
 conda_envs/*
+
+# github
+.github/*

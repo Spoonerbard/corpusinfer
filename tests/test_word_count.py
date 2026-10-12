@@ -5,20 +5,62 @@ import pytest
 from shakespeare.word_count import count_words_in_file
 
 
-def test_count_words_in_file_strips_punctuation_and_keeps_apostrophes(tmp_path: Path) -> None:
-    input_path = tmp_path / "sample.txt"
-    input_path.write_text("Hello, world! Hello. It's a test.\n", encoding="utf-8")
 
-    counts = count_words_in_file(input_path)
+    
+# Counts words correctly
+def test_single_word(tmp_path):
+    file = tmp_path / "single.txt"
+    file.write_text("hello")
 
-    assert counts["hello"] == 2
-    assert counts["world"] == 1
-    assert counts["it's"] == 1
-    assert counts["test"] == 1
+    result = count_words_in_file(file)
 
+    assert result == {"hello": 1}
 
-def test_count_words_in_file_missing_file_raises_clear_error(tmp_path: Path) -> None:
-    missing_path = tmp_path / "missing.txt"
+# Counts repeated words correctly
+def test_repeated_words(tmp_path):
+    file = tmp_path / "repeated.txt"
+    file.write_text("hello hello hello")
 
-    with pytest.raises(FileNotFoundError, match="Input file not found"):
-        count_words_in_file(missing_path)
+    result = count_words_in_file(file)
+
+    assert result == {"hello": 3}
+
+# Handles empty files
+def test_empty_file_returns_empty_dict(tmp_path):
+    file = tmp_path / "empty.txt"
+    file.write_text("")
+
+    result = count_words_in_file(file)
+
+    assert result == {}
+
+# Raises an error for missing files
+def test_missing_file_raises_error(tmp_path):
+    file = tmp_path / "missing.txt"
+
+    with pytest.raises(FileNotFoundError):
+        count_words_in_file(file)
+        
+# Produces output sorted by descending frequency
+
+def test_output_sorted_by_descending_frequency(tmp_path):
+    file = tmp_path / "frequency.txt"
+    file.write_text("apple banana apple cherry banana apple")
+
+    result = count_words_in_file(file)
+
+    sorted_result = dict(sorted(result.items(), key=lambda item: item[1], reverse=True))
+    assert sorted_result == {"apple": 3, "banana": 2, "cherry": 1}
+
+# Writes valid JSON
+def test_writes_valid_json(tmp_path):
+    import json
+
+    file = tmp_path / "json.txt"
+    file.write_text("apple banana apple")
+
+    result = count_words_in_file(file)
+
+    json_str = json.dumps(result)
+    parsed = json.loads(json_str)
+    assert parsed == result

@@ -32,4 +32,4 @@ data/*
 conda_envs/*
 
 # github
-.github/*
+.github/

@@ -5,6 +5,24 @@
 A Python 3.12+ data processing project that counts word frequencies in a text file
 (the Shakespeare corpus) and writes the results to JSON.
 
+
+## assumptions
+
+
+need basic suite of unit tests to ensure correct functionality, 
+
+need a point of comparsion
+
+compare to a version of the shakespeare corpus found on github as when trying to test teh validate of the counts returned, there was a mismatch between the two, likely reason is editorial changes between different versions, so not suitable. 
+
+
+
+
+
+## design decisions
+
+use copilot to test out different methods and approaches to find the most optimal solution, create a notebook file using ipython to benchmark different solution. likely best candidate is counter from collections module, as this implementation uses CPython dict data type. rather than slower bytecode. 
+
 ## Installation
 
 1. Clone the repository and change into it.

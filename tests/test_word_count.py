@@ -1,8 +1,10 @@
+import json
+import re
 from pathlib import Path
 
 import pytest
 
-from shakespeare.word_count import count_words_in_file
+from shakespeare.word_count import count_words_in_file, save_word_counts
 
 
 
@@ -64,3 +66,22 @@ def test_writes_valid_json(tmp_path):
     json_str = json.dumps(result)
     parsed = json.loads(json_str)
     assert parsed == result
+
+# save_word_counts writes the data to a timestamped file and returns its path
+def test_save_word_counts_writes_json_and_returns_path(tmp_path):
+    word_counts = {"apple": 3, "banana": 2, "cherry": 1}
+
+    output_path = save_word_counts(word_counts, tmp_path)
+
+    assert output_path.exists()
+    assert re.fullmatch(r"shakespeare_word_counts_\d{8}_\d{6}\.json", output_path.name)
+    assert json.loads(output_path.read_text(encoding="utf-8")) == word_counts
+
+# save_word_counts creates the output directory if it does not exist
+def test_save_word_counts_creates_output_dir(tmp_path):
+    output_dir = tmp_path / "nested" / "output"
+
+    output_path = save_word_counts({"hello": 1}, output_dir)
+
+    assert output_dir.exists()
+    assert output_path.parent == output_dir

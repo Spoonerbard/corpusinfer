@@ -1,4 +1,4 @@
-name: shakespeare
+name: corpus_analysis
 channels:
   - conda-forge
   - defaults
